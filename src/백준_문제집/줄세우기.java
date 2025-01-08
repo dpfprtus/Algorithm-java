@@ -6,6 +6,7 @@ import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+//단순히 앞에 키가 더 큰 사람이 몇명인제 세면 된다.
 public class 줄세우기 {
     public static void main(String[] args) throws IOException {
 
