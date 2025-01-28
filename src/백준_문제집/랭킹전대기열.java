@@ -44,6 +44,7 @@ public class 랭킹전대기열 {
 
             int flag = 0;
 
+
             for (int j = 0; j < list.size(); j++) {
                 int listLevel = Integer.parseInt(list.get(j).get(0)[0][0]);
                 if (Integer.parseInt(level) <= listLevel + 10 && Integer.parseInt(level) >= listLevel - 10
