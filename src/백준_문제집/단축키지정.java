@@ -34,7 +34,7 @@ public class 단축키지정 {
 					for (int k = 0; k < word.length; k++) {
 
 						for (int l = 0; l < word[k].length(); l++) {
-							if (word[k].charAt(l) == (char)idx && flag2 == 0 && idx != ' ') {
+							if (j == k && word[k].charAt(l) == (char)idx && flag2 == 0 && idx != ' ') {
 								newWord.append("[").append(word[k].charAt(l)).append("]");
 								flag2 = 1;
 								continue;
@@ -47,6 +47,7 @@ public class 단축키지정 {
 					flag = 1;
 					break;
 				}
+
 			}
 			if (flag == 0) {
 				for (int j = 0; j < option[i].length(); j++) {
