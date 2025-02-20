@@ -1,48 +1,34 @@
 package 백준_문제집;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
-//단순히 앞에 키가 더 큰 사람이 몇명인제 세면 된다.
 public class 줄세우기 {
     public static void main(String[] args) throws IOException {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        int p = Integer.parseInt(br.readLine());
-        for (int i = 0; i < p; i++) {
-            String[] numbers = br.readLine().split(" ");
-            List<Integer> students = new ArrayList<>();
-            for (int j = 1; j < numbers.length; j++) {
-                students.add(Integer.parseInt(numbers[j]));
+        int P = Integer.parseInt(br.readLine());
+
+        for (int i = 0; i < P; i++) {
+            String[] info  = br.readLine().split(" ");
+            int[] nums = new int[21];
+            for (int j = 0; j < 21; j++) {
+                nums[j] = Integer.parseInt(info[j]);
             }
 
-            int count = 0;
-            List<Integer> list = new ArrayList<>();
-
-            for (Integer height : students) {
-                int flag = 0;
-                for (int k = 0; k < list.size(); k++) {
-                    if (list.get(k) > height) {
-                        count += list.size()- k;
-                        list.add(k, height);
-                        flag = 1;
-                        break;
+            int answer = 0;
+            for (int j = 1; j < 21; j++) {
+                int cnt = 0;
+                for (int k = 1; k < j; k++) {
+                    if(nums[j] < nums[k]){
+                        cnt++;
                     }
                 }
-                if(flag == 0) list.add(height);
-
+                answer += cnt;
             }
-
-            bw.write(numbers[0] +" "+ count +"\n");
+            System.out.println(nums[0] + " " + answer);
 
         }
-        bw.flush();
-        bw.close();
-        br.close();
-
-
     }
 }
