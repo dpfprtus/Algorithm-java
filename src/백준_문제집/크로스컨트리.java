@@ -14,7 +14,6 @@ public class 크로스컨트리 {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-		
 		//팀 성적 : 6명 중 상위 4명 점수 합산
 		//점수 : 결승점 통과 순서대로 점수 부여.
 		//우승 : 가장 낮은 점수를 얻는 팀
@@ -25,64 +24,56 @@ public class 크로스컨트리 {
 		//출력 : 우승팀
 
 		int T = Integer.parseInt(br.readLine());
-		int[] answer = new int[T];
+
 		for (int i = 0; i < T; i++) {
 			int N = Integer.parseInt(br.readLine());
-			Map<Integer, Integer> countMap = new HashMap<>();
+			int[] players = new int[N];
 			StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-			int[] ranks = new int[N];
-			int maxTeamNum = 0;
 			for (int j = 0; j < N; j++) {
-
-				int teamNum = Integer.parseInt(st.nextToken());
-				countMap.put(teamNum, countMap.getOrDefault(teamNum,0)+1);
-				ranks[j] = teamNum;
-				maxTeamNum = Math.max(maxTeamNum, teamNum);
+				players[j] = Integer.parseInt(st.nextToken());
 			}
 
-			int[] fivePlayer = new int[maxTeamNum + 1];
-			Map<Integer, Integer> scoreMap = new HashMap<>();
-			Map<Integer, Integer> tmpMap = new HashMap<>();
-			int score = 1;
+			Map<Integer, Integer> checkPlayerNum = new HashMap<>();
+			for (int j = 0; j < N; j++) {
+				checkPlayerNum.put(players[j], checkPlayerNum.getOrDefault(players[j], 0) + 1);
+			}
 
-			for (int rank : ranks) {
-				if(countMap.get(rank) == 6) {
-					tmpMap.put(rank, tmpMap.getOrDefault(rank, 0) + 1);
-
-					if (tmpMap.get(rank) <= 4) {
-						scoreMap.put(rank, scoreMap.getOrDefault(rank,0)+score);
-
-					}
-					if (tmpMap.get(rank) == 5) {
-						fivePlayer[rank] = score;
-					}
-					score++;
+			Map<Integer, Integer> playerScore = new HashMap<>();
+			int order = 1;
+			int[] playerCnt = new int[201];
+			int[] fifty = new int[201];
+			for (int j = 0; j < N; j++) {
+				if (checkPlayerNum.getOrDefault(players[j], 0) < 6) {
+					continue;
 				}
-
+				playerCnt[players[j]]++;
+				if (playerCnt[players[j]] <= 4) {
+					playerScore.put(players[j], playerScore.getOrDefault(players[j] , 0)+order);
+				} else if (playerCnt[players[j]] == 5) {
+					fifty[players[j]] = order;
+				}
+				order++;
 			}
 
-			int result = Integer.MAX_VALUE;
-			int fiveScore = Integer.MAX_VALUE;
-
-			for (Integer key : scoreMap.keySet()) {
-				int tmp = scoreMap.get(key);
-				if (tmp < result) {
-					result = tmp;
-					fiveScore = fivePlayer[key];
-					answer[i] = key;
-				} else if (tmp == result) {
-					if (fiveScore > fivePlayer[key]) {
-						answer[i] = key;
+			int maxScore = Integer.MAX_VALUE;
+			int fiftyScore = Integer.MAX_VALUE;;
+			int answer = 0;
+			for (int n : playerScore.keySet()) {
+				int tmp = playerScore.get(n);
+				if (tmp < maxScore) {
+					maxScore = tmp;
+					fiftyScore = fifty[n];
+					answer = n;
+				} else if (tmp == maxScore) {
+					if (fiftyScore > fifty[n]) {
+						answer = n;
+						fiftyScore = fifty[n];
 					}
-
 				}
 			}
 
+			System.out.println(answer);
 		}
-		for (int a : answer) {
-			System.out.println(a);
-		}
-
 
 	}
 }
