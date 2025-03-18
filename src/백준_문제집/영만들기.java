@@ -14,49 +14,36 @@ public class 영만들기 {
     static int N;
     static boolean[] visited;
     static char[] arr;
-    static List<String> ans = new ArrayList<>();
+    static StringBuilder sb;
     static String[] op = {"-", "+", " "};
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int T = Integer.parseInt(br.readLine());
+
         for (int i = 0; i < T; i++) {
             N = Integer.parseInt(br.readLine());
-            ans = new ArrayList<>();
-            dfs(1, "1");
-            Collections.sort(ans);
-            for (String s : ans) {
-                System.out.println(s);
-            }
-            System.out.println();
+            sb = new StringBuilder();
+            dfs(1, 1, 0, 1, "1");
+            System.out.println(sb);
         }
+
 
     }
 
-    public static void dfs(int cnt, String express) {
-        if (cnt == N) {
-            String answer = express.replaceAll(" ", "");
-            if (cal(answer)) {
-                ans.add(express);
+    public static void dfs(int idx, int lastNum, int sum, int ops, String str) {
+        if(idx == N){
+            sum += (lastNum * ops);
+            if (sum == 0) {
+                sb.append(str+"\n");
             }
             return;
         }
-        dfs(cnt + 1, express + op[0]+ Integer.toString(cnt + 1));
-        dfs(cnt + 1, express + op[1] +Integer.toString(cnt + 1));
-        dfs(cnt + 1, express + op[2]+Integer.toString(cnt + 1));
+
+        dfs(idx+1, (lastNum)*10+(idx+1),sum,ops,str+op[2]+(idx+1));
+        dfs(idx + 1, idx+1, sum+(lastNum*ops), 1,str+op[1]+(idx+1));
+        dfs(idx+ 1, idx+1, sum+(lastNum*ops),-1,str+op[0]+(idx+1));
     }
 
-    public static boolean cal(String express) {
-        StringTokenizer st = new StringTokenizer(express, "+-", true);
-        int sum = Integer.parseInt(st.nextToken());
-        while (st.hasMoreElements()) {
-            String token = st.nextToken();
-            if (token.equals("+")) {
-                sum += Integer.parseInt(st.nextToken());
-            }else{
-                sum -= Integer.parseInt(st.nextToken());
-            }
-        }
-        return sum == 0;
-    }
 }
+
