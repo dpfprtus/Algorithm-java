@@ -24,11 +24,12 @@ public class 인구이동 {
 	}
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
 		String[] info = br.readLine().split(" ");
 		N = Integer.parseInt(info[0]);
 		L = Integer.parseInt(info[1]);
 		R = Integer.parseInt(info[2]);
+		int answer = 0;
+
 		arr = new int[N][N];
 
 		for (int i = 0; i < N; i++) {
@@ -37,72 +38,59 @@ public class 인구이동 {
 				arr[i][j] = Integer.parseInt(info[j]);
 			}
 		}
-		System.out.println(move());
 
-		//각 칸의 인구 수  : 연합의 인구 수/ 연합을 이루고 있는 칸의 개수 => 소수점은 제거
-		//1. 국경선 열기
-		//2. 인구 이동 -> 각 칸의 인구 수로 조정.
-
-	}
-
-	public static int move() {
-		int cnt = 0;
-
-		while (true) {
-			boolean isMove = false;
+		while(true) {
+			boolean isBreak = true;
 			visited = new int[N][N];
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
-					if (visited[i][j] != 1) {
+					if (visited[i][j] == 0) {
 						int sum = bfs(i, j);
-						if (nodeArr.size() > 1) {
-							movePopulation(sum);
-							isMove = true;
-
+						if(nodeArr.size() > 1){
+							cal(sum);
+							isBreak = false;
 						}
 					}
 				}
 			}
-			if (!isMove) break;
-			cnt++;
+			if (isBreak) break;
+			answer++;
 		}
-		return cnt;
+		System.out.println(answer);
 	}
 
-	public static void movePopulation(int sum) {
-		int population = sum/nodeArr.size();
+
+
+	public static void cal(int sum) {
 		for (Node node : nodeArr) {
-			arr[node.x][node.y] = population;
+			arr[node.x][node.y] = sum / nodeArr.size();
 		}
 	}
 
-	//국경선 열기
-	public static int bfs(int i, int j) {
-		Queue<Node> q = new LinkedList<>();
-
-		q.add(new Node(i,j));
-		visited[i][j] = 1;
+	public static int bfs(int a, int b){
 		nodeArr = new ArrayList<>();
-		nodeArr.add(new Node(i, j));
-		int[] dx = new int[] {-1, 1, 0, 0};
-		int[] dy = new int[] {0, 0, -1, 1};
-
-		int sum = arr[i][j];
-		while (!q.isEmpty()) {
+		Queue<Node> q = new LinkedList<>();
+		q.add(new Node(a, b));
+		nodeArr.add(new Node(a, b));
+		visited[a][b] = 1;
+		int[] dx = new int[]{-1,1,0,0};
+		int[] dy = new int[]{0,0,-1,1};
+		int sum = arr[a][b];
+		while(!q.isEmpty()){
 			Node node = q.poll();
-			for (int k = 0; k < 4; k++) {
-				int nx = node.x + dx[k];
-				int ny = node.y + dy[k];
+			for(int i = 0;i<4;i++){
+				int nx = node.x + dx[i];
+				int ny = node.y + dy[i];
 
-				if (0<= nx && nx < N && 0<= ny && ny <N && visited[nx][ny] != 1) {
-					int abs = Math.abs(arr[node.x][node.y] - arr[nx][ny]);
-					if (L <= abs && abs <= R) {
-						Node newNode = new Node(nx, ny);
-						nodeArr.add(newNode);
-						q.add(newNode);
-						visited[nx][ny] = 1;
+				if(0 <= nx && nx < N && 0 <= ny && ny < N && visited[nx][ny] != 1){
+					int result = Math.abs(arr[nx][ny] - arr[node.x][node.y]);
+					if(result >= L && result <= R){
+						nodeArr.add(new Node(nx, ny));
 						sum += arr[nx][ny];
+						visited[nx][ny] = 1;
+						q.add(new Node(nx, ny));
 					}
+
 				}
 			}
 		}
